@@ -1,4 +1,8 @@
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ZombieParty.Models;
 using ZombieParty.Models.Data;
 
@@ -7,17 +11,35 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Injecter la localisation ICI
 #region Localizer configuration
+CultureInfo[] supportedCultures = new[]
+{
+    new CultureInfo("en-US"),
+    new CultureInfo("fr-CA")
+};
 
 
 #endregion
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                 .AddDataAnnotationsLocalization();
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
 builder.Services.AddDbContext<ZombiePartyDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
 
 
 var app = builder.Build();
+
+var locOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(locOptions.Value);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
