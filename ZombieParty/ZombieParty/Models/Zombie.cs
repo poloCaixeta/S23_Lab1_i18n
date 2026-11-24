@@ -8,13 +8,19 @@ namespace ZombieParty.Models
     {
         public int Id { get; set; }
 
+        [Display(Name = "Name")]
         [StringLength(20, MinimumLength = 5)]
         public string Name { get; set; }
 
         [StringLength(255)]
+        [Display(Name = "ShortDesc")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "ValidationRequired")]
+
         public string ShortDesc { get; set; }
 
-        [Range(1, 20, ErrorMessage = "{0} requires a value between {1} and {2}.")]
+        [Display(Name = "Point")]
+        [Range(1, 20, ErrorMessage = "RangeValidation")]
+
         public int Point { get; set; }
 
         public int Force { get; set; }

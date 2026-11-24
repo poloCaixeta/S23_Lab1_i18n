@@ -12,7 +12,9 @@ namespace ZombieParty.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "{0} has to be filled.")]
         public string TypeName { get; set; }
 
-        [Range(2, 5, ErrorMessage = "{0} requires a value between {1} and {2}.")]
+       
+        [Display(Name = "Point")]
+        [Range(1, 20, ErrorMessage = "RangeValidation")]
         public int Point { get; set; }
         [ValidateNever]
         public virtual List<Zombie>? Zombies { get; set; }

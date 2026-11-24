@@ -9,6 +9,9 @@ namespace ZombieParty.Models
         [StringLength(25, MinimumLength = 5)]
         public string Title { get; set; }
         [StringLength(255)]
+        [Display(Name = "Hunting Description")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "ValidationRequired")]
+
         public string Description { get; set; }
         public DateTime AdventureDate { get; set; }
 
